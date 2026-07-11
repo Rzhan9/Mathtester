@@ -1,4 +1,4 @@
-name: Test Coverage Review Agent
+name: PR Test Coverage Review
 
 on:
   pull_request:
@@ -6,38 +6,18 @@ on:
 
 jobs:
   review:
-    name: Review PR Test Coverage
     runs-on: ubuntu-latest
-    
     if: github.event.pull_request.draft == false
-    
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: Rzhan9/prtestbot@main
         with:
-          python-version: '3.11'
-
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r test-coverage-agent/requirements.txt
-
-      - name: Run Test Coverage Review Agent
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_EVENT_PATH: ${{ github.event_path }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          
-          # Configure one or more of these API keys in your repository secrets:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          # ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          # OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          
-          PYTHONPATH: test-coverage-agent/src
-        run: |
-          python test-coverage-agent/src/test_coverage_agent/main.py
+          llm_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
