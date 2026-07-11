@@ -21,3 +21,4 @@ jobs:
       - uses: Rzhan9/prtestbot@main
         with:
           llm_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          llm_provider: anthropic
