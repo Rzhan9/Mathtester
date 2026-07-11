@@ -4,19 +4,13 @@ on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
 
-permissions:
-  contents: read
-  pull-requests: write
-  issues: write
-
 jobs:
   review:
     name: Review PR Test Coverage
     runs-on: ubuntu-latest
-
-    # Avoid running on draft pull requests
+    
     if: github.event.pull_request.draft == false
-
+    
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -38,15 +32,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_EVENT_PATH: ${{ github.event_path }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_WORKSPACE: ${{ github.workspace }}
-
-          # Pass along whichever API key is configured in user secrets
+          
+          # Configure one or more of these API keys in your repository secrets:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
-
-          # Make python package imports resolve correctly
+          # ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          
           PYTHONPATH: test-coverage-agent/src
         run: |
           python test-coverage-agent/src/test_coverage_agent/main.py
