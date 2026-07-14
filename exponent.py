@@ -5,4 +5,7 @@ def exp(n1, n2):
         return 1
     elif n1 == 0:
         return 0
+
+    if n1 < 0 and n2 % 2 == 1:
+        print("Number is negative.")
     return n1 ** n2
