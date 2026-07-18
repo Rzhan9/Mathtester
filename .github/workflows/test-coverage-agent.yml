@@ -20,5 +20,6 @@ jobs:
 
       - uses: Rzhan9/prtestbot@main
         with:
-          llm_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          llm_provider: anthropic
+          llm_api_key: ${{ secrets.YOUR_API_KEY_SECRET }}  # Change YOUR_API_KEY_SECRET to your own LLM API key.
+          llm_provider: anthropic  # Options: anthropic, gemini, openai.
+          llm_model: claude-opus-4-5  # Optional: pin a specific model.
